@@ -26,7 +26,7 @@ if ($error != []) {
 $sql = "UPDATE `users` SET `status` = $status WHERE `users`.`id_user` IN (".implode(',',$checkbox).")";
     //WHERE id IN
 $query = $pdo->query($sql);
-$user = $query->fetch(PDO::FETCH_OBJ);
+//$user = $query->fetch(PDO::FETCH_OBJ);
 //echo $sql;
 
 

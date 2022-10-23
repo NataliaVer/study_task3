@@ -13,8 +13,9 @@ $role = trim(filter_var($_POST['role'], FILTER_SANITIZE_STRING));
 // $status = '0';
 // $role = 'User';
 
-$sql = "SELECT * FROM `users` WHERE `users`.`id_user` = $id_user";
-$query = $pdo->query($sql);
+$sql = 'SELECT * FROM `users` WHERE `users`.`id_user` = :id_user';
+$query = $pdo->prepare($sql);
+$query->execute(['id_user' => $id_user]);
 $user = $query->fetch(PDO::FETCH_OBJ);
 
 $error = [];
@@ -46,7 +47,7 @@ $sql = 'UPDATE `users` SET `first_name` = :first_name, `last_name` = :last_name,
 
 $query = $pdo->prepare($sql);
 $query->execute(['id' => $id_user, 'first_name' => $first_name, 'last_name' => $last_name, 'status' => $status, 'role' => $role]);
-$user = $query->fetch(PDO::FETCH_OBJ);
+//$user = $query->fetch(PDO::FETCH_OBJ);
 
 $result['status'] = true;
 $result['id'] = $id_user;

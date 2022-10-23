@@ -339,7 +339,7 @@ $('#delete').click(function () {
 function updateData() {
     $.ajax({
         type: "GET",
-        url: 'ajax/all_users.php',
+        url: 'ajax/all_users_two.php',
         success: function (response) {
             $('#content').html(response);
         },
