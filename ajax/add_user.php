@@ -2,15 +2,17 @@
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 
+$id_user = trim(filter_var($_POST['id_user'], FILTER_SANITIZE_NUMBER_INT));
 $first_name = trim(filter_var($_POST['first_name'], FILTER_SANITIZE_STRING));
 $last_name = trim(filter_var($_POST['last_name'], FILTER_SANITIZE_STRING));
 $status = trim(filter_var($_POST['status'], FILTER_SANITIZE_NUMBER_INT));
 $role = trim(filter_var($_POST['role'], FILTER_SANITIZE_STRING));
 
-// $first_name = 'test_n';
-// $last_name = 'test_n';
-// $status = '0';
-// $role = 'User';
+ //$id_user = 7;
+ //$first_name = 'test14';
+ //$last_name = 'test14';
+ //$status = '0';
+ //$role = 'User';
 
 $sql = 'SELECT `first_name`, `last_name` FROM `users` WHERE `first_name` = :first_name || `last_name` = :last_name';
 $query = $pdo->prepare($sql);
@@ -41,11 +43,13 @@ if ($error != []) {
     exit();
 }
 
-$sql = 'INSERT INTO `users` (`id_user`, `first_name`, `last_name`, `status`, `role`) VALUES (NULL, ?, ?, ?, ?)';
+$sql = 'INSERT INTO `users` (`id_user`, `first_name`, `last_name`, `status`, `role`) VALUES (?, ?, ?, ?, ?)';
 $query = $pdo->prepare($sql);
-$query->execute([$first_name, $last_name, $status, $role]);
+$query->execute([$id_user, $first_name, $last_name, $status, $role]);
 
 $result['status'] = true;
+$result['id_user'] = $id_user;
+
 
 $newJSON = json_encode($result);
 

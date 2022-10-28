@@ -24,7 +24,7 @@ if ($error != []) {
 $sql = "DELETE FROM `users` WHERE `users`.`id_user` IN (".implode(',',$checkbox).")";
     //WHERE id IN
 $query = $pdo->query($sql);
-//$user = $query->fetch(PDO::FETCH_OBJ);
+$user = $query->fetch(PDO::FETCH_OBJ);
 //echo $sql;
 
 

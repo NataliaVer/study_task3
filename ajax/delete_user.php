@@ -30,7 +30,7 @@ if ($error != []) {
 $sql = 'DELETE FROM `users` WHERE `users`.`id_user`=:id_user';
 $query = $pdo->prepare($sql);
 $query->execute(['id_user' => $id_user]);
-//$user = $query->fetch(PDO::FETCH_OBJ);
+$user = $query->fetch(PDO::FETCH_OBJ);
 
 $result['status'] = true;
 $result['id'] = $id_user;

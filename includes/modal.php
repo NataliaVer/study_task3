@@ -13,7 +13,7 @@
       </div>
 
       <form method="post" class="post">
-      <input type="hidden" name="user_id" class="hidden" value="">
+      <input type="hidden" name="user_id" class="hidden_user_id" value="">
 
       <div class="modal-body">
 
@@ -55,13 +55,7 @@
           You are about to delete selected users?
         </div>
         <div class="error">
-          <p id="set_default">
-            You have not selected any items
-          </p>
-
-          <p id="notcheck">
-            You have not selected any checkpoints
-          </p>
+          
         </div>
         <div class="result"></div>
 

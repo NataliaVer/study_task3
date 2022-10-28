@@ -5,10 +5,10 @@
     <nav role ="navigation" class="navbar navbar-expand-lg navbar-light bg-light">
 
 	  <div class="my-2 my-sm-3 my-lg-4 p-3">
-	    <button class="btn btn-primary openUserModal" type="button" data-whatever="Add">Add</button>
+	    <button class="btn btn-primary openUserModal" type="button" data-toggle="modal" data-target="#ModalWindow" data-whatever="Add">Add</button>
       </div>
 
-	  <select class="user_profile" name="user_profile" id="user_profile" required="required">
+	  <select class="user_profile_two" name="user_profile_two" id="user_profile_two" required="required">
         <option value="">Please Select</option>
         <option value="1">Set active</option>
         <option value="2">Set not active</option>
@@ -16,7 +16,7 @@
       </select>
 
       <div class="my-2 my-sm-3 my-lg-4 p-3">
-    	<button class="btn btn-primary error_all_selected" type="button" data-whatever="Action on the user">Ok</button>
+    	<button class="btn btn-primary error_all_selected_two" type="button" data-toggle="modal" data-target="#ModalWindow" data-whatever="Action on the user two">Ok</button>
       </div>
 
     </nav>

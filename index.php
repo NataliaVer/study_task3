@@ -14,7 +14,7 @@
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
 
-  <?php require "includes/blocs.php" ?>
+  <?php require_once "includes/blocs.php" ?>
 
   <!--ModalWindow-->
   <?php require "includes/modal.php" ?>
@@ -50,7 +50,7 @@
 </div>
 
 
-  <?php require "includes/blocs.php" ?>
+  <?php require_once "includes/blocs_two.php" ?>
 
   <script>
     $.ajaxSetup({
