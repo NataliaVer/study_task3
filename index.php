@@ -51,16 +51,16 @@
 
 
   <?php require_once "includes/blocs_two.php" ?>
-
-  <script>
+  
+    <script>
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-  </script>
+</script>
 
-  <script src="./js/main.js" deffer></script>
+  <script src="js/main.js"></script>
 
 </body>
 </html>

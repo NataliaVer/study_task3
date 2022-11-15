@@ -1,4 +1,4 @@
-<!--ModalWindow-->
+<!--ModalWindow for add/edit-->
 
 <link href="../css/modal.css" rel="stylesheet">
 
@@ -41,11 +41,41 @@
           <option value="2">Admin</option>
       </select>
         </div>
+        
+        <div class="errormodal"></div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close">Close</button>
+        <button type="button" class="btn btn-primary add_text" id="add_user">Save</button>
+        <button type="button" class="btn btn-primary adit_text" id="edit_user">Save changes</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<!--ModalConfirm-->
+
+<div class="modal" id="ModalWindowForConfirm" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title-for-confirm" id="tittleModalLabel">Action on the user</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form method="post" class="post">
+      <input type="hidden" name="user_id" class="hidden_user_id_confirm" value="">
+
+      <div class="modal-body">
 
         <div class="del_text">
           You really want to delete this user?
         </div>
-        <div class="set_active">
+        <!-- <div class="set_active">
           You are going to set the status to active for the selected users?
         </div>
         <div class="set_notactive">
@@ -53,18 +83,13 @@
         </div>
         <div class="set_delete">
           You are about to delete selected users?
-        </div>
-        <div class="error">
-          
-        </div>
-        <div class="result"></div>
+        </div> -->
 
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close">Close</button>
-        <button type="button" class="btn btn-primary add_text" id="add_user">Save</button>
-        <button type="button" class="btn btn-primary adit_text" id="edit_user">Save changes</button>
-        <button type="button" class="btn btn-danger del_text" id="del_user">Yes</button>
+        <button type="button" class="btn btn-danger set_del" id="del_user">Yes</button>
         <button type="button" class="btn btn-primary set_active" id="active">Yes</button>
         <button type="button" class="btn btn-primary set_notactive" id="notactive">Yes</button>
         <button type="button" class="btn btn-danger set_delete" id="delete">Yes</button>
@@ -73,6 +98,29 @@
     </div>
   </div>
 </div>
-<?php
 
-?>
+<!--ModalError-->
+
+<div class="modal" id="ModalWindowForError" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title-for-error" id="tittleModalLabel">Error</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" class="post">
+      <div class="modal-body">
+        <div class="result"></div>
+
+        <div class="error"></div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close">Close</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>

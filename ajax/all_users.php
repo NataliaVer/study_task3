@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '../includes/config.php';
-$sql = 'SELECT * FROM `users` ORDER BY `id_user` LIMIT 10';
+require '../htdocs/includes/config.php';
+$sql = 'SELECT * FROM `users` ORDER BY `id_user` LIMIT 25';
 $query = $pdo->query($sql);
 ?>
 
@@ -42,7 +42,7 @@ $query = $pdo->query($sql);
           <td class="text-center align-middle">
             <div class="btn-group align-top">
               <button class="btn btn-sm btn-outline-secondary badge openUserModal" type="button" data-whatever="Change" data-id="<?=$row['id_user']?>" >Edit</button>
-              <button class="btn btn-sm btn-outline-secondary badge del" type="button" data-toggle="modal" data-id="<?=$row['id_user']?>"><i
+              <button class="btn btn-sm btn-outline-secondary badge del" type="button" data-id="<?=$row['id_user']?>"><i
   class="fa fa-trash"></i></button>
             </div>
           </td>

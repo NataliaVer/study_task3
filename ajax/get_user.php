@@ -1,12 +1,11 @@
 <?php
 
-error_reporting(0);
-
-require_once $_SERVER['DOCUMENT_ROOT'] . '../includes/config.php';
+require '../includes/config.php';
 
 $id = trim(filter_var($_GET['id_user'], FILTER_SANITIZE_NUMBER_INT));
 
 //var_dump($id);
+//$id = 6;
 
 $sql = "SELECT * FROM `users` WHERE `users`.`id_user` = $id";
 $query = $pdo->query($sql);
@@ -18,14 +17,15 @@ $error = [];
 
 if (empty($id)) {
     $error = 'id empty';
-} else if (!$user->id_user == $id) {
-    $error = 'This id not property for
-     this user';
+} else if (!$user->id_user) {
+     $error = 'This user does not exist';
 }
 
 if ($error != []) {
     //echo $error;
     $result['error'] = ['code'=> 100, 'message'=> $error];
+    $newJSON = json_encode($result);
+    echo $newJSON;
     exit();
 }
 
@@ -41,4 +41,5 @@ $result['user'] = $userObj;
 $newJSON = json_encode($result);
 
 echo $newJSON;
+
 

@@ -1,6 +1,4 @@
 
-//--->select/unselect all > start
-
 $(document).on('click', '#all-items', function () {
     $('.custom-control-input').not(this).prop('checked', this.checked);
 });
@@ -12,83 +10,77 @@ $(document).on('change', '.custom-control-input',function () {
         $('#all-items').prop('checked', true);
     } else {
         $('#all-items').prop('checked', false);
-    };
+    }
 });
 
 //--->select/unselect all > end
 
 function get_checkbox() {
-  let array_checkbox_id = Array();
+  let array_checkbox_id = '';
   $('.custom-control-input:checked').each(function() {
-    //console.log($(this).context.id)});
-    array_checkbox_id.push($(this).context.id);
+    if ($(this).context.id != 'all-items') {
+        console.log($(this).context.id);
+        array_checkbox_id += $(this).context.id + ",";
+    }
   });
   return array_checkbox_id;
-};
+}
 
-$('#ModalWindow').on('hidden.bs.modal', function (event) {
-    $('#first_name').val("");
-    $('#last_name').val("");
-    //$('#status').prop('checked', false);
-    $('#status').val(0);
-    $('#role').val(1);
-    $('.error').text("");
-});
-
-$(document).on('click', '.error_all_selected', function () {
-    $('.form-group, .error, .result, #notcheck, #add_user, #edit_user, #del_user, .add_text, .edit_text, .del_text, .set_default, .set_active, .set_notactive, .set_delete, #active, #notactive, #delete').hide();
+function action_on_users(select_value) {
     
-    const select_value = document.getElementById("user_profile").value;
     const all_active_checkbox = $('.custom-control-input:checked').length;
-    $('.modal-title').text('Action on the users');
+
+    $('.modal-title-for-confirm').text('Action on the users');
+    $('#del_user, #active, #notactive, #delete').hide();
+
     if (all_active_checkbox == 0) {
-      $('.modal-title').text('Test');
       $('.error').text('You have not selected any items');
       $('.error').show();
+      $('#ModalWindowForError').modal('show');
     } else if (!select_value) {
       $('.error').text('You have not selected any checkpoints');
       $('.error').show();
+      $('#ModalWindowForError').modal('show');
     } else if (select_value == 1) {
-      $('.set_active, #active').show();
+        $('.del_text').text('You are going to set the status to active for the selected users?');
+      $('#active').show();
+      $('#ModalWindowForConfirm').modal('show');
     } else if (select_value == 2) {
-      $('.set_notactive, #notactive').show();
+        $('.del_text').text('You are going to set the status to not active for the selected users?');
+      $('#notactive').show();
+      $('#ModalWindowForConfirm').modal('show');
     } else if (select_value == 3) {
-      $('.set_delete, #delete').show();
-    };
-    $('#ModalWindow').modal();
+        $('.del_text').text('You are about to delete selected users?');
+      $('#delete').show();
+      $('#ModalWindowForConfirm').modal('show');
+    }
+}
+
+
+$(document).on('click', '.error_all_selected', function () {
+    
+    const select_value = document.getElementById("user_profile").value;
+   
+    action_on_users(select_value);
+
 });
 
 $(document).on('click', '.error_all_selected_two', function () {
-    $('.form-group, .error, .result, #notcheck, #add_user, #edit_user, #del_user, .add_text, .edit_text, .del_text, .set_default, .set_active, .set_notactive, .set_delete, #active, #notactive, #delete').hide();
-
+    
     const select_value = document.getElementById("user_profile_two").value;
-    const all_active_checkbox = $('.custom-control-input:checked').length;
-    $('.modal-title').text('Action on the users');
-    if (all_active_checkbox == 0) {
-      $('.error').text('You have not selected any items');
-      $('.error').show();
-    } else if (!select_value) {
-      $('.error').text('You have not selected any checkpoints');
-      $('.error').show();
-    } else if (select_value == 1) {
-      $('.set_active, #active').show();
-    } else if (select_value == 2) {
-      $('.set_notactive, #notactive').show();
-    } else if (select_value == 3) {
-      $('.set_delete, #delete').show();
-    };
-    $('#ModalWindow').modal();
+
+    action_on_users(select_value);
+
 });
 
-$(document).on('click', '.openUserModal', function () {
+$(document).on('click', '.openUserModal', function (event) {
     event.preventDefault();
-    $('.form-group, .error, .result, #notcheck, #add_user, #edit_user, #del_user, .add_text, .edit_text, .del_text, .set_default, .set_active, .set_notactive, .set_delete, #active, #notactive, #delete').hide();
-    let id_user = $(this).data('id');
-    $('.hidden_user_id').val(id_user);
+    $('.errormodal').hide();
 
-    console.log(id_user);
+    let id_user = $(this).data('id');
 
     if (id_user != undefined) {
+       $('.hidden_user_id').val(id_user);
     $.ajax({
         url: 'ajax/get_user.php',
         type: 'GET',
@@ -99,34 +91,43 @@ $(document).on('click', '.openUserModal', function () {
         dataType: 'json',
         success: function (data) {
             if (data.status) {
+                console.log(data.user.status);
                  $('#first_name').val(data.user.first_name);
                  $('#last_name').val(data.user.last_name);
                  $('#status').prop('checked', (data.user.status == 0)?false:true);
+                 $('#status').val(data.user.status);
                  $('#role').val((data.user.role=='User')?1:2);
                  $('.modal-title').text('Edit user');
-                 $('.form-group, #edit_user, .edit_text').show();
+                 $('#add_user').hide();
+                 $('#edit_user').show();
+                 $('#ModalWindow').modal('show');
                  return false;
             }
-            $('.form-group, #edit_user, .edit_text').hide();
+            $('#ModalWindow').modal('hide');
             $('.error').text(data.error.message);
             $('.error').show();
+            $('#ModalWindowForError').modal('show');
         },
         error: function(request, status, errorT) {
-             console.log(errorT);
+            $('#ModalWindow').modal('hide');
+            console.log(request);
+            $('.error').text(request.status+' '+request.statusText);
+            $('.error').show();
+            $('#ModalWindowForError').modal('show');
         }
     });
     } else {
         $('#first_name').val('');
         $('#last_name').val('');
-        //$('#status').prop('checked', false);
+        $('#status').prop('checked', false);
         $('#status').val(0);
         $('#role').val(1);
         $('.modal-title').text('Add user');
-        $('.form-group, #add_user, .add_text').show();
+        $('#add_user').show();
+        $('#edit_user').hide();
         console.log($('#status').val());
+        $('#ModalWindow').modal('show');
     }
-
-    $('#ModalWindow').modal();
 });
 
 $('#edit_user').click(function () {
@@ -135,6 +136,8 @@ $('#edit_user').click(function () {
     const status = $('#status').val();
     const role = ($('#role').val()==1)?'User':'Admin';
     const id_user = $('#ModalWindow').find('.hidden_user_id').val();
+
+    console.log($(this).data('id'));
 
     $.ajax({
         url: 'ajax/edit_user.php',
@@ -151,7 +154,6 @@ $('#edit_user').click(function () {
         success: function (data) {
             if (data.status) {
                 const str = document.getElementById('tr-'+id_user);
-                console.log(str);
                 str.cells[1].textContent = fname + ' ' + lname;
                 str.cells[2].textContent = role;
                 if (status == 1) {
@@ -162,15 +164,18 @@ $('#edit_user').click(function () {
                 $('.close').click();
                 return false;
             }
-            $('.result').hide();
-            $('.error').text(data.error.message);
-            $('.error').show();
-            console.log(data.error.message);
+            //$('#ModalWindow').modal('hide');
+            $('.errormodal').text(data.error.message);
+            $('.errormodal').show();
+            //$('#ModalWindowForError').modal('show');
         },
          error: function(request, status, errorT) {
-             console.log(errorT);
+            $('#ModalWindow').modal('hide');
+            $('.error').text(request.status+' '+request.statusText);
+            $('.error').show();
+            $('#ModalWindowForError').modal('show');
            }
-    });
+    })
     console.log('click #edit_user id=' + id_user);
 });
 
@@ -180,7 +185,6 @@ $('#add_user').click(function () {
     const status = $('#status').val();
     const role = ($('#role').val()==1)?'User':'Admin';
     const table = document.getElementById('users-table');
-    //last_row = Number(table.rows[table.rows.length-1].id.substr(3))+1;
     const id_user = Number(table.rows[table.rows.length-1].id.substr(3))+1;
     console.log(id_user);
 
@@ -233,7 +237,7 @@ $('#add_user').click(function () {
                 cell.innerHTML = '<div class="btn-group align-top">'+
               '<button class="btn btn-sm btn-outline-secondary badge openUserModal" type="button" data-whatever="Change" data-id="'+id_user+'" '+
               'data-target="#user-form-modal">Edit</button>'+
-              '<button class="btn btn-sm btn-outline-secondary badge del" type="button" data-toggle="modal" data-target="#ModalWindow" data-whatever="Delete" data-id="'+id_user+'"><i '+
+              '<button class="btn btn-sm btn-outline-secondary badge del" type="button" data-whatever="Delete" data-id="'+id_user+'"><i '+
               'class="fa fa-trash"></i></button>'+
               '</div>';
                 cell.className = 'text-center align-middle';
@@ -241,30 +245,35 @@ $('#add_user').click(function () {
                 $('.close').click();
                 return false;
             }
-            $('.result').hide();
-            $('.error').text(data.error.message);
-            $('.error').show();
-            console.log(data.error.message);
+            //$('#ModalWindow').modal('hide');
+            $('.errormodal').text(data.error.message);
+            $('.errormodal').show();
+            //$('#ModalWindowForError').modal('show');
         },
          error: function(request, status, errorT) {
-             console.log(errorT);
+            $('#ModalWindow').modal('hide');
+            $('.error').text(request.status+' '+request.statusText);
+            $('.error').show();
+            $('#ModalWindowForError').modal('show');
            }
     });
     console.log('click #add_user');
 });
 
 $(document).on('click', '.del', function () {
-    $('.form-group, .error, .result, #notcheck, #add_user, #edit_user, #del_user, .add_text, .edit_text, .del_text, .set_default, .set_active, .set_notactive, .set_delete, #active, #notactive, #delete').hide();
     let id_user = $(this).data('id');
-    console.log(id_user);
-    $('.hidden_user_id').val(id_user);
-    $('.modal-title').text('Delete user');
-    $('.del_text, #del_user').show();
-    $('#ModalWindow').modal();
+    let row = document.getElementById('tr-'+id_user);
+    
+    $('#del_user, #active, #notactive, #delete').hide();
+    $('.hidden_user_id_confirm').val(id_user);
+    $('.modal-title-for-confirm').text('Delete user');
+    $('.del_text').text('You really want to delete '+row.cells[1].innerText+'?');
+    $('#del_user').show();
+    $('#ModalWindowForConfirm').modal('show');
 });
 
 $('#del_user').click(function () {
-    const id_user = $('#ModalWindow').find('.hidden_user_id').val();
+    const id_user = $('#ModalWindowForConfirm').find('.hidden_user_id_confirm').val();
 
     $.ajax({
         url: 'ajax/delete_user.php',
@@ -283,14 +292,16 @@ $('#del_user').click(function () {
                 $('.close').click();
                 return false;
             }
-            $('.result').hide();
-            $('.error').show(function () {
-                $(this).text(data.error.message);
-                console.log('error');
-            });
+            $('#ModalWindowForConfirm').modal('hide');
+            $('.error').text(data.error.message);
+            $('.error').show();
+            $('#ModalWindowForError').modal('show');
         },
         error: function(request, status, errorT) {
-             console.log(errorT);
+            $('#ModalWindowForConfirm').modal('hide');
+            $('.error').text(request.status+' '+request.statusText);
+            $('.error').show();
+            $('#ModalWindowForError').modal('show');
            }
     });
     console.log('click #del_user id=' + id_user);
@@ -299,7 +310,6 @@ $('#del_user').click(function () {
 $('#active').click(function () {
     const checkbox = get_checkbox();
     const status = 1;
-    console.log(checkbox);
 
     $.ajax({
         url: 'ajax/set_status.php',
@@ -312,18 +322,26 @@ $('#active').click(function () {
         dataType: 'json',
         success: function (data) {
             if (data.status) {
-                updateData();
+                const arr_id = data.id.split(',');
+                arr_id.forEach(function(id_user) {
+                    let str = document.getElementById('tr-'+id_user);
+                    $('#'+id_user).prop('checked', false);
+                    str.cells[3].innerHTML = '<i class="fa fa-circle active-circle"></i>';
+                });
+                $('#all-items').prop('checked', false);
                 $('.close').click();
                 return false;
             }
-            $('.result').hide();
-            $('.error').show(function () {
-                $(this).text(data.error.message);
-                console.log('error');
-            });
+            $('#ModalWindowForConfirm').modal('hide');
+            $('.error').text(data.error.message);
+            $('.error').show();
+            $('#ModalWindowForError').modal('show');
         },
          error: function(request, status, errorT) {
-             console.log(errorT);
+            $('#ModalWindowForConfirm').modal('hide');
+            $('.error').text(request.status+' '+request.statusText);
+            $('.error').show();
+            $('#ModalWindowForError').modal('show');
            }
     });
     console.log('click #active id=' + checkbox);
@@ -345,18 +363,26 @@ $('#notactive').click(function () {
         dataType: 'json',
         success: function (data) {
             if (data.status) {
-                updateData();
+                const arr_id = data.id.split(',');
+                arr_id.forEach(function(id_user) {
+                    let str = document.getElementById('tr-'+id_user);
+                    $('#'+id_user).prop('checked', false);
+                    str.cells[3].innerHTML = '<i class="fa fa-circle" style="color:gray"></i>';
+                });
+                $('#all-items').prop('checked', false);
                 $('.close').click();
                 return false;
             }
-            $('.result').hide();
-            $('.error').show(function () {
-                $(this).text(data.error.message);
-                console.log('error');
-            });
+            $('#ModalWindowForConfirm').modal('hide');
+            $('.error').text(data.error.message);
+            $('.error').show();
+            $('#ModalWindowForError').modal('show');
         },
          error: function(request, status, errorT) {
-             console.log(errorT);
+            $('#ModalWindowForConfirm').modal('hide');
+            $('.error').text(request.status+' '+request.statusText);
+            $('.error').show();
+            $('#ModalWindowForError').modal('show');
            }
     });
     console.log('click #notactive id=' + checkbox);
@@ -377,18 +403,26 @@ $('#delete').click(function () {
         dataType: 'json',
         success: function (data) {
             if (data.status) {
-                updateData();
+                const arr_id = data.id.split(',');
+                arr_id.forEach(function(id_user) {
+                    let row = document.getElementById('tr-'+id_user);
+                    $('#'+id_user).prop('checked', false);
+                    row.parentNode.removeChild(row);
+                });
+                $('#all-items').prop('checked', false);
                 $('.close').click();
                 return false;
             }
-            $('.result').hide();
-            $('.error').show(function () {
-                $(this).text(data.error.message);
-                console.log('error');
-            });
+            $('#ModalWindowForConfirm').modal('hide');
+            $('.error').text(data.error.message);
+            $('.error').show();
+            $('#ModalWindowForError').modal('show');
         },
          error: function(request, status, errorT) {
-             console.log(errorT);
+            $('#ModalWindowForConfirm').modal('hide');
+            $('.error').text(request.status+' '+request.statusText);
+            $('.error').show();
+            $('#ModalWindowForError').modal('show');
            }
     });
     console.log('click #delete id=' + checkbox);
@@ -397,7 +431,7 @@ $('#delete').click(function () {
 function updateData() {
     $.ajax({
         type: "GET",
-        url: 'ajax/all_users.php',
+        url: 'ajax/all_users_two.php',
         success: function (response) {
             $('#content').html(response);
         },
@@ -406,13 +440,5 @@ function updateData() {
 
 $('input[type="checkbox"]').change(function(){
   $('#status').val(($('#status').val() == 1)?0:1);
+  console.log($('#status').val());
 });
-
-// $('select.user_profile').click(function () {
-//     const selected = $(this).children('option:selected').val();
-
-//     $('select.user_profile').not(this).val(selected);
-
-//     console.log(selected);
-
-//     });

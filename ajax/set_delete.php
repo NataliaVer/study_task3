@@ -1,16 +1,18 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '../includes/config.php';
+require '../includes/config.php';
 
-$checkbox = $_POST['checkbox'];
+$checkbox = trim(filter_var($_POST['checkbox'],FILTER_SANITIZE_STRING));
+$checkbox = rtrim($checkbox, ',');
+$arr = explode(',', $checkbox);
 //$checkbox = array(6, 7);
 
 $error = [];
 
-if (!$checkbox) {
+if (!$arr) {
     $error = 'No users selected';
 };
 
-if (!is_array($checkbox)) {
+if (!is_array($arr)) {
     $error = 'Not correct id';
 };
 
@@ -21,10 +23,10 @@ if ($error != []) {
     exit();
 }
 
-$sql = "DELETE FROM `users` WHERE `users`.`id_user` IN (".implode(',',$checkbox).")";
+$sql = "DELETE FROM `users` WHERE `users`.`id_user` IN (".implode(',',$arr).")";
     //WHERE id IN
 $query = $pdo->query($sql);
-$user = $query->fetch(PDO::FETCH_OBJ);
+//$user = $query->fetch(PDO::FETCH_OBJ);
 //echo $sql;
 
 
