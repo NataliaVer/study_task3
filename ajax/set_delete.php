@@ -1,12 +1,15 @@
 <?php
 require '../includes/config.php';
+$error = [];
+
+if ($_SERVER['REQUEST_METHOD'] != "POST") {
+    $error = 'It`s not POST request';
+} else {
 
 $checkbox = trim(filter_var($_POST['checkbox'],FILTER_SANITIZE_STRING));
 $checkbox = rtrim($checkbox, ',');
 $arr = explode(',', $checkbox);
 //$checkbox = array(6, 7);
-
-$error = [];
 
 if (!$arr) {
     $error = 'No users selected';
@@ -15,6 +18,7 @@ if (!$arr) {
 if (!is_array($arr)) {
     $error = 'Not correct id';
 };
+}
 
 if ($error != []) {
     $result['error'] = ['code'=> 100, 'message'=> $error];

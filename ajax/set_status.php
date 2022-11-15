@@ -2,6 +2,11 @@
 require '../includes/config.php';
 
 $not_exist_id = 0;
+$error = [];
+
+if ($_SERVER['REQUEST_METHOD'] != "POST") {
+    $error = 'It`s not POST request';
+} else {
 
 $checkbox = trim(filter_var($_POST['checkbox'],FILTER_SANITIZE_STRING));
 $status = trim(filter_var($_POST['status'], FILTER_SANITIZE_NUMBER_INT));
@@ -21,8 +26,6 @@ foreach ($users as $userid) {
     }
 }
 
-$error = [];
-
 if ($not_exist_id<count($arr)) {
     $error = 'The selected user does not exist';
 }
@@ -34,6 +37,7 @@ if (!$arr) {
 if (!is_array($arr)) {
     $error = 'Not correct id';
 };
+}
 
 if ($error != []) {
     $result['error'] = ['code'=> 100, 'message'=> $error];

@@ -1,6 +1,11 @@
 <?php
 
 require_once '../includes/config.php';
+$error = [];
+
+if ($_SERVER['REQUEST_METHOD'] != "POST") {
+    $error = 'It`s not POST request';
+} else {
 
 $id_user = trim(filter_var($_POST['id_user'], FILTER_SANITIZE_NUMBER_INT));
 $first_name = trim(filter_var($_POST['first_name'], FILTER_SANITIZE_STRING));
@@ -19,8 +24,6 @@ $query->execute(['first_name' => $first_name, 'last_name' => $last_name]);
 
 $user = $query->fetch(PDO::FETCH_OBJ);
 
-$error = [];
-
 if ($first_name == null || $last_name == null) {
     $error = 'Please enter first name or last name';
 } else if ($user->first_name == $first_name && $user->last_name == $last_name) {
@@ -33,6 +36,7 @@ if ($first_name == null || $last_name == null) {
     $error = 'Enter the last name must be more than three characters';
 } else if (!$role) {
     $error = 'Please enter role';
+}
 }
 
 if ($error != []) {
