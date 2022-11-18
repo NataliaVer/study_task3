@@ -14,7 +14,11 @@
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
 
-  <?php require_once "includes/blocs.php" ?>
+  <?php
+    $id_ok = "top";
+    $user_profile = "user_profile";
+    require "includes/blocs.php"
+  ?>
 
   <!--ModalWindow-->
   <?php require "includes/modal.php" ?>
@@ -50,7 +54,11 @@
 </div>
 
 
-  <?php require_once "includes/blocs_two.php" ?>
+  <?php
+    $id_ok = "bottom";
+    $user_profile = "user_profile_two";
+    require "includes/blocs.php"
+  ?>
   
     <script>
     $.ajaxSetup({

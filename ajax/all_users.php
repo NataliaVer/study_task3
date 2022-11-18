@@ -37,7 +37,7 @@ $query = $pdo->query($sql);
           <td class="text-center align-middle"><?php if($row['status']==1): ?>
             <i class="fa fa-circle active-circle"></i></td>
             <?php else:?>
-              <i class="fa fa-circle" style="color:gray"></i></td>
+              <i class="fa fa-circle"></i></td>
               <?php endif;?>
           <td class="text-center align-middle">
             <div class="btn-group align-top">

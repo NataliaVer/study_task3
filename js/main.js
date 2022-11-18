@@ -59,17 +59,16 @@ function action_on_users(select_value) {
 
 $(document).on('click', '.error_all_selected', function () {
     
-    const select_value = document.getElementById("user_profile").value;
-   
-    action_on_users(select_value);
+    if ($(this).parent().attr('id') == "top") {
+        const select_value = document.getElementById("user_profile").value;
 
-});
+        action_on_users(select_value);
 
-$(document).on('click', '.error_all_selected_two', function () {
-    
-    const select_value = document.getElementById("user_profile_two").value;
+    } else {
+        const select_value = document.getElementById("user_profile_two").value;
 
-    action_on_users(select_value);
+        action_on_users(select_value);
+    }
 
 });
 
@@ -156,11 +155,11 @@ $('#edit_user').click(function () {
                 const str = document.getElementById('tr-'+id_user);
                 str.cells[1].textContent = fname + ' ' + lname;
                 str.cells[2].textContent = role;
+               let classActive = '';
                 if (status == 1) {
-                    str.cells[3].innerHTML = '<i class="fa fa-circle active-circle"></i>';
-                } else {
-                    str.cells[3].innerHTML = '<i class="fa fa-circle" style="color:gray"></i>';
+                    classActive = 'active-circle';
                 }
+                str.cells[3].innerHTML = `<i class="fa fa-circle ${classActive}"></i>`;
                 $('.close').click();
                 return false;
             }
@@ -226,11 +225,11 @@ $('#add_user').click(function () {
                 cell.className = 'text-nowrap align-middle';
 
                 cell = row.insertCell(3);
+                 let classActive = "";
                 if (status == 1) {
-                    cell.innerHTML = '<i class="fa fa-circle active-circle"></i>';
-                } else {
-                    cell.innerHTML = '<i class="fa fa-circle" style="color:gray"></i>';
+                    classActive = 'active-circle';
                 }
+                cell.innerHTML = `<i class="fa fa-circle ${classActive}"></i>`;
                 cell.className = 'text-center align-middle';
 
                 cell = row.insertCell(4);
@@ -367,7 +366,7 @@ $('#notactive').click(function () {
                 arr_id.forEach(function(id_user) {
                     let str = document.getElementById('tr-'+id_user);
                     $('#'+id_user).prop('checked', false);
-                    str.cells[3].innerHTML = '<i class="fa fa-circle" style="color:gray"></i>';
+                    str.cells[3].innerHTML = '<i class="fa fa-circle"></i>';
                 });
                 $('#all-items').prop('checked', false);
                 $('.close').click();
