@@ -6,6 +6,12 @@ $id = trim(filter_var($_GET['id_user'], FILTER_SANITIZE_NUMBER_INT));
 
 //var_dump($id);
 //$id = 6;
+//21.11.2022 перенесено перевірку умов вище
+if (empty($id)) {
+    $error = 'id empty';
+    //21.11.2022 замінено на функцію
+     showError($error);
+}
 
 $sql = "SELECT * FROM `users` WHERE `users`.`id_user` = $id";
 $query = $pdo->query($sql);
@@ -13,20 +19,10 @@ $user = $query->fetch(PDO::FETCH_OBJ);
 
 //var_dump($pdo->errorInfo());
 
-$error = [];
-
-if (empty($id)) {
-    $error = 'id empty';
-} else if (!$user->id_user) {
+if (!$user->id_user) {
      $error = 'This user does not exist';
-}
-
-if ($error != []) {
-    //echo $error;
-    $result['error'] = ['code'=> 100, 'message'=> $error];
-    $newJSON = json_encode($result);
-    echo $newJSON;
-    exit();
+     //21.11.2022 замінено на функцію
+     showError($error);
 }
 
 $userObj->id_user = trim(filter_var($user->id_user, FILTER_SANITIZE_NUMBER_INT));

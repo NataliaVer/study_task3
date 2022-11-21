@@ -34,11 +34,7 @@ $query = $pdo->query($sql);
           </td>
           <td class="text-nowrap align-middle"><?=$row['first_name']." ".$row['last_name']?></td>
           <td class="text-nowrap align-middle"><span><?=$row['role']?></span></td>
-          <td class="text-center align-middle"><?php if($row['status']==1): ?>
-            <i class="fa fa-circle active-circle"></i></td>
-            <?php else:?>
-              <i class="fa fa-circle"></i></td>
-              <?php endif;?>
+          <td class="text-center align-middle"><i class="fa fa-circle <?= $row['status'] ? "active-circle" : ""; ?>"></i></td>
           <td class="text-center align-middle">
             <div class="btn-group align-top">
               <button class="btn btn-sm btn-outline-secondary badge openUserModal" type="button" data-whatever="Change" data-id="<?=$row['id_user']?>" >Edit</button>

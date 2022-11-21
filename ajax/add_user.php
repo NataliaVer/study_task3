@@ -1,11 +1,12 @@
 <?php
 
 require_once '../includes/config.php';
-$error = [];
 
 if ($_SERVER['REQUEST_METHOD'] != "POST") {
     $error = 'It`s not POST request';
-} else {
+    //21.11.2022 замінено на функцію, був зайвий else
+    showError($error);
+}
 
 $id_user = trim(filter_var($_POST['id_user'], FILTER_SANITIZE_NUMBER_INT));
 $first_name = trim(filter_var($_POST['first_name'], FILTER_SANITIZE_STRING));
@@ -18,18 +19,9 @@ $role = trim(filter_var($_POST['role'], FILTER_SANITIZE_STRING));
 // $status = '0';
 // $role = 'User';
 
-$sql = 'SELECT `first_name`, `last_name` FROM `users` WHERE `first_name` = :first_name || `last_name` = :last_name';
-$query = $pdo->prepare($sql);
-$query->execute(['first_name' => $first_name, 'last_name' => $last_name]);
-
-$user = $query->fetch(PDO::FETCH_OBJ);
-
+//21.11.2022 умову піднято вище
 if ($first_name == null || $last_name == null) {
     $error = 'Please enter first name or last name';
-} else if ($user->first_name == $first_name && $user->last_name == $last_name) {
-    $error = 'This first name and last name are already registered';
-//} else if ($user->last_name == $last_name) {
-    //$error = 'This last name is already registered';
 } else if (strlen($first_name) <= 3) {
     $error = 'Enter the first name must be more than three characters';
 } else if (strlen($last_name) <= 3) {
@@ -37,13 +29,21 @@ if ($first_name == null || $last_name == null) {
 } else if (!$role) {
     $error = 'Please enter role';
 }
+//21.11.2022 замінено на функцію
+if ($error != []) {
+    showError($error);
 }
 
-if ($error != []) {
-    $result['error'] = ['code'=> 100, 'message'=> $error];
-    $newJSON = json_encode($result);
-    echo $newJSON;
-    exit();
+$sql = 'SELECT `first_name`, `last_name` FROM `users` WHERE `first_name` = :first_name || `last_name` = :last_name';
+$query = $pdo->prepare($sql);
+$query->execute(['first_name' => $first_name, 'last_name' => $last_name]);
+
+$user = $query->fetch(PDO::FETCH_OBJ);
+
+if ($user->first_name == $first_name && $user->last_name == $last_name) {
+    $error = 'This first name and last name are already registered';
+    //21.11.2022 замінено на функцію
+    showError($error);
 }
 
 $sql = 'INSERT INTO `users` (`id_user`, `first_name`, `last_name`, `status`, `role`) VALUES (?, ?, ?, ?, ?)';

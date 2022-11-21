@@ -1,10 +1,11 @@
 <?php
 require '../includes/config.php';
-$error = [];
 
 if ($_SERVER['REQUEST_METHOD'] != "POST") {
     $error = 'It`s not POST request';
-} else {
+    //21.11.2022 замінено на функцію, був зайвий else
+    showError($error);
+}
 
 $checkbox = trim(filter_var($_POST['checkbox'],FILTER_SANITIZE_STRING));
 $checkbox = rtrim($checkbox, ',');
@@ -18,13 +19,10 @@ if (!$arr) {
 if (!is_array($arr)) {
     $error = 'Not correct id';
 };
-}
 
 if ($error != []) {
-    $result['error'] = ['code'=> 100, 'message'=> $error];
-    $newJSON = json_encode($result);
-    echo $newJSON;
-    exit();
+    //21.11.2022 замінено на функцію
+    showError($error);
 }
 
 $sql = "DELETE FROM `users` WHERE `users`.`id_user` IN (".implode(',',$arr).")";
